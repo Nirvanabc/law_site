@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping auto-import="true" default-lazy="false">
+
+	<class name="law_site.Employees" table="employees">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="person_id" column="person_id"/>
+		<property name="education" column="education"/>
+		<property name="position_id" column="position_id"/>
+		<property name="adress" column="adress"/>
+		<set name="employees_in_service" lazy="false">
+		  <key column="employee_id"/>
+		  <one-to-many class="law_site.EmployeesInService"/>
+		</set>
+	</class>
+
+	<class name="law_site.EmployeesInService" table="employees_in_service">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="service_id" column="service_id"/>
+		<property name="employee_id" column="employee_id"/>
+	</class>
+
+	<class name="law_site.Phones" table="phones">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="person_id" column="person_id"/>
+		<property name="phone" column="phone"/>
+	</class>
+
+	<class name="law_site.Education" table="education">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="education_name" column="education_name"/>
+		<set name="employees" lazy="false">
+		  <key column="education"/>
+		  <one-to-many class="law_site.Employees"/>
+		</set>
+	</class>
+	
+	<class name="law_site.Emails" table="emails">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="person_id" column="person_id"/>
+		<property name="email" column="email"/>
+	</class>
+	
+	<class name="law_site.ServiceTypes" table="service_types">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="service_name" column="service_name"/>
+		<property name="cost" column="cost"/>
+	</class>
+	
+	<class name="law_site.ServiceHistory" table="service_history">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="service_type" column="service_type"/>
+		<property name="client_id" column="client_id"/>
+		<property name="from_time" column="from_time"/>
+		<property name="to_time" column="to_time"/>
+		<set name="employees_in_service" lazy="false">
+		  <key column="service_id"/>
+		  <one-to-many class="law_site.EmployeesInService"/>
+		</set>
+	</class>	
+		
+	<class name="law_site.Clients" table="clients">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="client_name" column="client_name"/>
+		<set name="service_history" lazy="false">
+		  <key column="client_id"/>
+		  <one-to-many class="law_site.ServiceHistory"/>
+		</set>
+		<set name="client_contacts" lazy="false">
+		  <key column="client_id"/>
+		  <one-to-many class="law_site.ClientContacts"/>
+		</set>
+	</class>
+
+	<class name="law_site.ClientContacts" table="client_contacts">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="client_id" column="client_id"/>
+		<property name="person_id" column="person_id"/>
+		<property name="adress" column="adress"/>
+	</class>
+	
+
+	<class name="law_site.Positions" table="positions">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="position_name" column="position_name"/>
+		<property name="salary" column="salary"/>
+		<set name="employees" lazy="false">
+		  <key column="position_id"/>
+		  <one-to-many class="law_site.Employees"/>
+		</set>
+		
+	</class>
+
+	<class name="law_site.People" table="people">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="person_name" column="person_name"/>
+		<property name="person_surname" column="person_surname"/>
+		<property name="person_patronymic" column="person_patronymic"/>
+		<set name="phones" lazy="false">
+		  <key column="person_id"/>
+		  <one-to-many class="law_site.Phones"/>
+		</set>
+
+		<set name="employees" lazy="false">
+		  <key column="person_id"/>
+		  <one-to-many class="law_site.Employees"/>
+		</set>
+
+		<set name="emails" lazy="false">
+		  <key column="person_id"/>
+		  <one-to-many class="law_site.Emails"/>
+		</set>
+
+		<set name="client_contacts" lazy="false">
+		  <key column="person_id"/>
+		  <one-to-many class="law_site.ClientContacts"/>
+		</set>
+	</class>
+	
+</hibernate-mapping>

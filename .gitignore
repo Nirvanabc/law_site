@@ -1,0 +1,6 @@
+bin
+*war
+build
+*lib
+*~
+*bz2
