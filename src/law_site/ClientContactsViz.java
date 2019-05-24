@@ -2,12 +2,11 @@ package law_site;
 
 public class ClientContactsViz {
 	private String client_name;
+	private Short client_represent_id;
 	private String client_work_adress;
 	private String client_represent_name;
 	private String client_represent_surname;
 	private String client_represent_patronymic;
-	private String email;
-	private String phone;
 	
 	public String getClient_name() {
 		return client_name;
@@ -26,18 +25,6 @@ public class ClientContactsViz {
 	}
 	public void setClient_represent_name(String client_represent_name) {
 		this.client_represent_name = client_represent_name;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
 	}
 	public String getClient_represent_surname() {
 		return client_represent_surname;
@@ -58,7 +45,12 @@ public class ClientContactsViz {
 		System.out.println(this.client_represent_surname);
 		System.out.println(this.client_represent_patronymic);
 		System.out.println(this.client_work_adress);
-		System.out.println(this.email);
-		System.out.println(this.phone);
 	}
+	public Short getClient_represent_id() {
+		return client_represent_id;
+	}
+	public void setClient_represent_id(Short client_represent_id) {
+		this.client_represent_id = client_represent_id;
+	}
+
 }

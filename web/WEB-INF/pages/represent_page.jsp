@@ -8,14 +8,14 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Клиент</title>
+        <title>Представитель компании</title>
     </head>
     <body>
     	<div>
     	<a href = "clients"> К списку клиентов</a>
     	</div>
 
-    	<div>Данные о клиенте</div>
+    	<div>Данные о представителе</div>
     	${client.client_name}
     	
     	<div>Представители: <div>

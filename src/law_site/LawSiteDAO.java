@@ -565,33 +565,16 @@ public class LawSiteDAO {
 		return list;
 	}
 	
-	public List<EmployeeContacts> getEmployeeContacts(String employee_surname) {
-		Session session = sessions.openSession();
-		session.beginTransaction();
-		String sql = "select phones.phone, emails.email " + 
-				"from phones inner join people on people.id = phones.person_id " +
-				"inner join emails on emails.person_id = people.id " +
-			    "where people.person_surname like :surname";
-		Query query = session.createSQLQuery(sql).setParameter("surname", employee_surname).setResultTransformer(Transformers.aliasToBean(EmployeeContacts.class));
-		session.getTransaction().commit();
-		@SuppressWarnings("unchecked")
-		List<EmployeeContacts> list = query.list();
-		session.close();
-		return list;
-	}
-	
 	public List<ClientContactsViz> getClientContacts(String client_name) {
 		Session session = sessions.openSession();
 		session.beginTransaction();
 		String sql = "select clients.client_name, adress as client_work_adress, " +
 				"person_name as client_represent_name, " +
+				"people.id as client_represent_id, " +
 				"person_surname as client_represent_surname, " +
-				"person_patronymic as client_represent_patronymic, " +
-				"email, phone " +
+				"person_patronymic as client_represent_patronymic " +
 				"from clients inner join client_contacts on client_contacts.client_id = clients.id " +
 			    "inner join people on people.id = client_contacts.person_id " +
-			    "inner join phones on phones.person_id = people.id " +
-			    "inner join emails on emails.person_id = people.id " +
 				"where clients.client_name like :client_name";
 		Query query = session.createSQLQuery(sql).setParameter("client_name", client_name)
 					.setResultTransformer(Transformers.aliasToBean(ClientContactsViz.class));

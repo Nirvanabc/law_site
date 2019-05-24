@@ -11,6 +11,42 @@
         <title>Clients</title>
     </head>
     <body>
+    
+    <div>
+    	<a href = "clients"> Список клиентов</a>
+    	</div>
+    	<div>
+    	<a href = "employees"> Список сотрудников</a>
+    	</div>
+    	<div>
+    	<a href = "services"> Список услуг</a>
+    
+     <form class = "addform" METHOD="post">
+   	 		<div>
+				<div> Добавить нового клиента </div>
+				<div> Название:
+					<spring:bind path="newclient.name">
+						<input type="text" name="name"/>
+					</spring:bind>
+				</div>
+			</div>
+			<input type="submit" value="Добавить">
+   	 	</form>
+    
+    <form class = "deleteform" METHOD="post">
+   	 		<div>
+				<div> Удалить клиента </div>
+				<spring:bind path="clientid.clientid">
+					<select name="clientid">
+						<c:forEach items="${clients}" var="client">
+						<option value = "${client.id}">${client.id}</option>
+						</c:forEach>
+					</select>
+				</spring:bind>
+			</div>
+			<input type="submit" value="Удалить">
+   	 	</form>
+    
     	<div>Клиенты</div>
          <table class = "main_data">
 			<tr> <td>Id</td> <td>Название</td></tr>

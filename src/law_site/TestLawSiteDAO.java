@@ -407,35 +407,6 @@ public class TestLawSiteDAO {
 		};
 	}
 	
-	@Test(dataProvider = "empContactsTestData")
-	public void EmployeesContactsTest(String s1) {
-		LawSiteDAO ls = new LawSiteDAO();
-		List<EmployeeContacts> employeeContacts = null;
-		
-		try {
-			employeeContacts = ls.getEmployeeContacts(s1);
-			System.out.println(s1);
-			for(EmployeeContacts e : employeeContacts) {
-	            e.print();
-	        }
-
-		} catch (Exception e) {
-			System.out.println("^^");
-			e.printStackTrace();
-			assert(false);
-		}
-	}
-	
-	@DataProvider
-	public Object[][] empContactsTestData() {
-		return new Object[][] {
-			new Object[] { "TEST1" },
-			new Object[] { "Илюшин" },
-			new Object[] { "Плющева" },
-			new Object[] { "Гусев" },
-		};
-	}
-	
 	@Test(dataProvider = "clientContactsTestData")
 	public void ClientContactsTest(String s1) {
 		LawSiteDAO ls = new LawSiteDAO();
