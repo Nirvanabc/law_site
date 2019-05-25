@@ -1,5 +1,6 @@
 package law_site;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -16,7 +17,7 @@ public class Controller1 {
 	
 	private static LawSiteDAO dao = new LawSiteDAO();
 	
-	public static class NewClient{
+	public static class ClientName{
 		private String name;
 		public String getname() {
 			return name;
@@ -26,28 +27,39 @@ public class Controller1 {
 		}
 	}
 	
-	
-	public static class ClientInfo{
+	public static class NewRepresent{
 		private String name;
+		private String surname;
+		private String patron;
+		private String adress;
+		
 		public String getname() {
 			return name;
 		}
 		public void setname(String s) {
 			this.name = s;
 		}
+		public String getSurname() {
+			return surname;
+		}
+		public void setSurname(String surname) {
+			this.surname = surname;
+		}
+		public String getPatron() {
+			return patron;
+		}
+		public void setPatron(String patron) {
+			this.patron = patron;
+		}
+		public String getAdress() {
+			return adress;
+		}
+		public void setAdress(String adress) {
+			this.adress = adress;
+		}
 	}
 	
-	public static class CourseName{
-		private String cname;
-		public String getcname() {
-			return cname;
-		}
-		public void setcname(String s) {
-			this.cname = s;
-		}
-	}
-	
-	public static class ClientId{
+	public static class IdClient{
 		private int clientid;
 		public int getclientid() {
 			return clientid;
@@ -57,10 +69,62 @@ public class Controller1 {
 		}
 	}
 	
+	@RequestMapping(value = "/clients", method = RequestMethod.GET)
+	public String getLessons(ModelMap model) {
+		model.addAttribute("newclient", new ClientName()); 
+		model.addAttribute("idclient", new IdClient());
+		model.addAttribute("clientname", new ClientName());
+		try {
+			List<Clients> clients = dao.getAllClients();
+			model.addAttribute("clients", clients);
+		} catch (HibernateException e) {
+			return "error";
+		}
+		return "clients";
+	}
+	
+	@RequestMapping(value = "/clients", method = RequestMethod.POST)
+	public String lessons_post(@ModelAttribute("newclient") ClientName nc, @ModelAttribute("idclient") IdClient ic, 
+			@ModelAttribute("clientname") ClientName cn,  ModelMap model) {
+		try {
+			List<Clients> clients = dao.getAllClients();
+			if(nc.name != null && nc.name.length() >= 1) {
+				Clients client = new Clients();
+				client.setClient_name(nc.name);
+				dao.storeClient(client);
+				clients = dao.getAllClients();
+			}
+				else if(ic.clientid != 0) {
+					Clients deleted = dao.loadClient(ic.clientid);
+					dao.deleteClient(deleted);
+					clients = dao.getAllClients();
+				}
+				
+			model.addAttribute("clients", clients);
+		}	catch(HibernateException e) {
+			return "error";
+		}
+		return "clients";
+ 
+	}
+	
 	@RequestMapping(value = "/client_represent", method = RequestMethod.GET)
 	public String getClientRepresent(@RequestParam("client_id") int client_id, 
 			@RequestParam("represent_id") int represent_id, ModelMap model) {
-		model.addAttribute("clientinfo", new ClientInfo());
+		try {
+			Clients client = dao.loadClient(client_id);
+			model.addAttribute("client", client);
+			List<ClientContactsViz> cc = dao.getClientContacts(client.getClient_name());
+			model.addAttribute("cc", cc);
+		} catch (HibernateException e) {
+			return "error";
+		}
+		return "client";
+	}
+	
+	@RequestMapping(value = "/client_represent", method = RequestMethod.POST)
+	public String ClientRepresent_post(@RequestParam("client_id") int client_id, 
+			@RequestParam("represent_id") int represent_id, ModelMap model) {
 		try {
 			Clients client = dao.loadClient(client_id);
 			model.addAttribute("client", client);
@@ -74,10 +138,10 @@ public class Controller1 {
 	
 	@RequestMapping(value = "/client", method = RequestMethod.GET)
 	public String getClient(@RequestParam("id") int client_id, ModelMap model) {
-		model.addAttribute("clientinfo", new ClientInfo());
 		try {
 			Clients client = dao.loadClient(client_id);
 			model.addAttribute("client", client);
+			model.addAttribute("newrepr", new NewRepresent());
 			List<ClientContactsViz> cc = dao.getClientContacts(client.getClient_name());
 			model.addAttribute("cc", cc);
 		} catch (HibernateException e) {
@@ -88,18 +152,34 @@ public class Controller1 {
 	
 	@RequestMapping(value = "/client", method = RequestMethod.POST)
 	public String client_post(@RequestParam("id") Integer client_id, 
-			@ModelAttribute("clientinfo") ClientInfo cin, 
+			@ModelAttribute("newrepr") NewRepresent nr,
 			ModelMap model) {
 		try {
 			Clients client = dao.loadClient(client_id);
 			model.addAttribute("client", client);
+			model.addAttribute("newrepr", new NewRepresent());
 			String name = client.getClient_name();
 			List<ClientContactsViz> cc = dao.getClientContacts(client.getClient_name());
 			model.addAttribute("name", name);
+			
+			if(nr.name != null && nr.name.length() >= 1 && nr.surname != null && nr.surname.length() >= 1 ) {
+				People person = new People();
+				person.setPerson_name(nr.name);
+				person.setPerson_surname(nr.surname);
+				person.setPerson_patronymic(nr.patron);
+				dao.storePeople(person);
+				ClientContacts ncc = new ClientContacts();
+				ncc.setAdress(nr.adress);
+				ncc.setClient_id(client_id);
+				ncc.setPerson_id(person.getId());
+				dao.storeClientContact(ncc);
+			}
+			cc = dao.getClientContacts(client.getClient_name());
 			model.addAttribute("сс", cc);
 		}	catch(HibernateException e) {
 			return "error";
 		}
+
 		return "client";
 	}
 	
@@ -107,44 +187,5 @@ public class Controller1 {
 	public String get123(ModelMap model) {
 		return "123";
 	}
-	
-	@RequestMapping(value = "/clients", method = RequestMethod.GET)
-	public String getClients(ModelMap model) {
 
-		try {
-			List<Clients> clients = dao.getAllClients();
-			model.addAttribute("clients", clients);
-			model.addAttribute("clientid", new ClientId());
-			model.addAttribute("newclient", new NewClient());
-		} catch (HibernateException e) {
-			return "error";
-		}
-		return "clients";
-	}
-	
-	@RequestMapping(value = "/clients", method = RequestMethod.POST)
-	public String clients_post(@ModelAttribute("newclient") NewClient nc, 
-			@ModelAttribute("clientid") ClientId ci, ModelMap model) {
-		try {
-			List<Clients> clients = dao.getAllClients();
-			
-			if(nc.name != null && nc.name != null && nc.name.length() >= 1) {
-				Clients client = new Clients();
-				client.setClient_name(nc.name);
-				dao.storeClient(client);
-				clients = dao.getAllClients();
-			} else if(ci.clientid != 0) {
-				Clients deleted = dao.loadClient(ci.clientid);
-				dao.deleteClient(deleted);
-				clients = dao.getAllClients();
-			}
-			model.addAttribute("clients", clients);
-		} catch(HibernateException e) {
-			return "error";
-		}
-		return "clients";
- 
-	}
-	
-	
 }

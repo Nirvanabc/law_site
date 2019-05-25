@@ -40,7 +40,7 @@ public class LawSiteDAO {
 			session.save(clientContact);
 			session.getTransaction().commit();
 		} catch (Exception e) {
-			System.out.println("!@!");
+			System.out.println(e);
 		}
 		finally {
 			if (session != null && session.isOpen()) {

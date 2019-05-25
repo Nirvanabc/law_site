@@ -14,13 +14,33 @@
     	<div>
     	<a href = "clients"> К списку клиентов</a>
     	</div>
+    	
+    	     <form class = "addform" METHOD="post">
+   	 		<div>
+				<div> Добавить нового представителя </div>
+				<div> ФИО, адрес:
+					<spring:bind path="newrepr.name">
+						<input type="text" name="name"/>
+					</spring:bind>
+					<spring:bind path="newrepr.surname">
+						<input type="text" name="surname"/>
+					</spring:bind>
+					<spring:bind path="newrepr.patron">
+						<input type="text" name="patron"/>
+					</spring:bind>
+					<spring:bind path="newrepr.adress">
+						<input type="text" name="adress"/>
+					</spring:bind>
+				</div>
+			</div>
+			<input type="submit" value="Добавить">
+   	 	</form>    	
 
     	<div>Данные о клиенте</div>
     	${client.client_name}
     	
     	<div>Представители: <div>
     	<div> Id,  адрес,  ФИО</div>
-    	<body>
     	
          <table class = "main_data">
 			<c:forEach items="${cc}" var="contact">
@@ -29,7 +49,7 @@
 			   ${contact.client_represent_id}
 				</a>
 				</td>
-				<td class = "lesson_id">
+				<td class = "client_id">
 				${contact.client_work_adress}
 				,
 				${contact.client_represent_name}
@@ -40,7 +60,6 @@
 			</c:forEach>
 			
 	</table> 
-    </body>
     
     </body>
 </html>

@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Clients</title>
+        <title>Клиенты</title>
     </head>
     <body>
     
@@ -36,10 +36,10 @@
     <form class = "deleteform" METHOD="post">
    	 		<div>
 				<div> Удалить клиента </div>
-				<spring:bind path="clientid.clientid">
+				<spring:bind path="idclient.clientid">
 					<select name="clientid">
-						<c:forEach items="${clients}" var="client">
-						<option value = "${client.id}">${client.id}</option>
+						<c:forEach items="${clients}" var="cur_client">
+						<option value = "${cur_client.id}">${cur_client.id}</option>
 						</c:forEach>
 					</select>
 				</spring:bind>
