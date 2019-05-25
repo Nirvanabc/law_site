@@ -37,6 +37,18 @@
    	 	</form>    	
 
     	<div>Данные о клиенте</div>
+    	
+    	<form class = "changeform" METHOD="post">
+   	 		<div>
+				<div> Название:
+					<spring:bind path="newclientname.name">
+						<input type="text" name="name" value="${client.client_name}"/>
+					</spring:bind>
+				</div>
+			</div>
+			<input type="submit" value="Изменить">
+   	 	</form>
+    	
     	${client.client_name}
     	
     	<div>Представители: <div>

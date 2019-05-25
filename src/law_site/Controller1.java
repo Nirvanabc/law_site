@@ -142,6 +142,7 @@ public class Controller1 {
 			Clients client = dao.loadClient(client_id);
 			model.addAttribute("client", client);
 			model.addAttribute("newrepr", new NewRepresent());
+			model.addAttribute("newclientname", new ClientName());
 			List<ClientContactsViz> cc = dao.getClientContacts(client.getClient_name());
 			model.addAttribute("cc", cc);
 		} catch (HibernateException e) {
@@ -151,18 +152,20 @@ public class Controller1 {
 	}
 	
 	@RequestMapping(value = "/client", method = RequestMethod.POST)
-	public String client_post(@RequestParam("id") Integer client_id, 
+	public String client_post(@RequestParam("id") int client_id,
+			@ModelAttribute("newclientname") ClientName nn,
 			@ModelAttribute("newrepr") NewRepresent nr,
 			ModelMap model) {
 		try {
 			Clients client = dao.loadClient(client_id);
 			model.addAttribute("client", client);
 			model.addAttribute("newrepr", new NewRepresent());
+			model.addAttribute("newclientname", new ClientName());
 			String name = client.getClient_name();
 			List<ClientContactsViz> cc = dao.getClientContacts(client.getClient_name());
 			model.addAttribute("name", name);
 			
-			if(nr.name != null && nr.name.length() >= 1 && nr.surname != null && nr.surname.length() >= 1 ) {
+		    if(nr.name != null && nr.name.length() >= 1 && nr.surname != null && nr.surname.length() >= 1 ) {
 				People person = new People();
 				person.setPerson_name(nr.name);
 				person.setPerson_surname(nr.surname);
@@ -173,6 +176,10 @@ public class Controller1 {
 				ncc.setClient_id(client_id);
 				ncc.setPerson_id(person.getId());
 				dao.storeClientContact(ncc);
+			} else if(nn.name != null && nn.name.length() >= 1) {
+				client.setClient_name(nn.name);
+				dao.updateClient(client);
+				client = dao.loadClient(client_id);
 			}
 			cc = dao.getClientContacts(client.getClient_name());
 			model.addAttribute("сс", cc);
