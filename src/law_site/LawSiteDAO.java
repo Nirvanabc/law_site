@@ -528,6 +528,34 @@ public class LawSiteDAO {
 		session.close();
 	}
 	
+	public List<String> getPersonPhones(int person_id) {
+		Session session = sessions.openSession();
+		session.beginTransaction();
+		String sql = " select phone from phones " + 
+				"inner join people on people.id = phones.person_id " +
+				"where person_id = :person_id";
+		Query query = session.createSQLQuery(sql).setParameter("person_id", person_id);
+		session.getTransaction().commit();
+		@SuppressWarnings("unchecked")
+		List<String> list = query.list();
+		session.close();
+		return list;
+	}
+
+	public List<String> getPersonEmails(int person_id) {
+		Session session = sessions.openSession();
+		session.beginTransaction();
+		String sql = " select email from emails " + 
+				"inner join people on people.id = emails.person_id " +
+				"where person_id = :person_id";
+		Query query = session.createSQLQuery(sql).setParameter("person_id", person_id);
+		session.getTransaction().commit();
+		@SuppressWarnings("unchecked")
+		List<String> list = query.list();
+		session.close();
+		return list;
+	}
+	
 	public List<String> getClientsByEmployeeSurname(String employee_surname) {
 		Session session = sessions.openSession();
 		session.beginTransaction();

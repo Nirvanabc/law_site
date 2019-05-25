@@ -57,7 +57,7 @@
          <table class = "main_data">
 			<c:forEach items="${cc}" var="contact">
 			<tr class = "table_info">
-			   <td class = "contact_id"><a href="represent_page?id=${contact.client_represent_id}">
+			   <td class = "contact_id"><a href="person?id=${contact.client_represent_id}">
 			   ${contact.client_represent_id}
 				</a>
 				</td>

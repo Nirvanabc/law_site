@@ -27,6 +27,40 @@ public class Controller1 {
 		}
 	}
 	
+	public static class E{
+		private String name1;
+		public String getname1() {
+			return name1;
+		}
+		public void setname1(String s) {
+			this.name1 = s;
+		}
+	}
+	
+	public static class NewData{
+		private String name;
+		private String surname;
+		private String patron;
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getPatron() {
+			return patron;
+		}
+		public void setPatron(String patron) {
+			this.patron = patron;
+		}
+		public String getSurname() {
+			return surname;
+		}
+		public void setSurname(String surname) {
+			this.surname = surname;
+		}
+	}
+	
 	public static class NewRepresent{
 		private String name;
 		private String surname;
@@ -108,32 +142,67 @@ public class Controller1 {
  
 	}
 	
-	@RequestMapping(value = "/client_represent", method = RequestMethod.GET)
-	public String getClientRepresent(@RequestParam("client_id") int client_id, 
-			@RequestParam("represent_id") int represent_id, ModelMap model) {
+	@RequestMapping(value = "/person", method = RequestMethod.GET)
+	public String getPerson(@RequestParam("id") int person_id, ModelMap model) {
 		try {
-			Clients client = dao.loadClient(client_id);
-			model.addAttribute("client", client);
-			List<ClientContactsViz> cc = dao.getClientContacts(client.getClient_name());
-			model.addAttribute("cc", cc);
+			People person = dao.loadPeople(person_id);
+			model.addAttribute("person", person);
+			model.addAttribute("newphone", new ClientName());
+			model.addAttribute("newdata", new NewData());
+			model.addAttribute("newemail", new E());
+			List<String> phones = dao.getPersonPhones(person_id);
+			List<String> emails = dao.getPersonEmails(person_id);
+			model.addAttribute("phones", phones);
+			model.addAttribute("emails", emails);
 		} catch (HibernateException e) {
 			return "error";
 		}
-		return "client";
+		return "person";
 	}
 	
-	@RequestMapping(value = "/client_represent", method = RequestMethod.POST)
-	public String ClientRepresent_post(@RequestParam("client_id") int client_id, 
-			@RequestParam("represent_id") int represent_id, ModelMap model) {
+	@RequestMapping(value = "/person", method = RequestMethod.POST)
+	public String Person_post(@RequestParam("id") int person_id,
+			@ModelAttribute("newdata") NewData data,
+			@ModelAttribute("newphone") ClientName newphone,
+			@ModelAttribute("newemail") E newemail,
+			ModelMap model) {
 		try {
-			Clients client = dao.loadClient(client_id);
-			model.addAttribute("client", client);
-			List<ClientContactsViz> cc = dao.getClientContacts(client.getClient_name());
-			model.addAttribute("cc", cc);
+			model.addAttribute("newdata", new NewData());
+			model.addAttribute("newphone", new ClientName());
+			model.addAttribute("newemail", new E());
+			List<String> phones = dao.getPersonPhones(person_id);
+			List<String> emails = dao.getPersonEmails(person_id);
+			People person = dao.loadPeople(person_id);
+			model.addAttribute("person", person);
+			if(data.name != null && data.name.length() >= 1 && data.surname != null && data.surname.length() >= 1 ) {
+				person.setPerson_name(data.name);
+				person.setPerson_surname(data.surname);
+				person.setPerson_patronymic(data.patron);
+				dao.updatePeople(person);
+				person = dao.loadPeople(person_id);
+			} else if (newphone.name != null && newphone.name.length() >= 1) {
+				System.out.println(newphone.name);
+				System.out.println(newemail.name1);
+				Phones p = new Phones();
+				p.setPhone(newphone.name);
+				p.setPerson_id(person_id);
+				dao.storePhone(p);
+				phones = dao.getPersonPhones(person_id);
+			} else if (newemail.name1 != null && newemail.name1.length() >= 1) {
+				System.out.println(newphone.name);
+				System.out.println(newemail.name1);
+				Emails e = new Emails();
+				e.setEmail(newemail.name1);
+				e.setPerson_id(person_id);
+				dao.storeEmail(e);
+				emails = dao.getPersonEmails(person_id);
+			}
+			model.addAttribute("phones", phones);
+			model.addAttribute("emails", emails);
 		} catch (HibernateException e) {
 			return "error";
 		}
-		return "client";
+		return "person";
 	}
 	
 	@RequestMapping(value = "/client", method = RequestMethod.GET)
