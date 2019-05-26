@@ -116,58 +116,7 @@ public class LawSiteDAO {
 			}
 		}
 	}
-	
-	public List<Education> getAllEducation() {
-		Session session = sessions.openSession();
-		session.beginTransaction();
-		@SuppressWarnings("unchecked")
-		List<Education> list = session.createCriteria(Education.class).list();
-		session.getTransaction().commit();
-		session.close();
-		return list;
-	}
-	
-	public Education loadEducation(Integer id) {
-		Session session = sessions.openSession();
-		session.beginTransaction();
-		Education education = (Education) session.load(Education.class, id);
-		session.getTransaction().commit();
-		session.close();
-		return education;
-	}
-	
-	public void storeEducation(Education education) {
-		Session session = sessions.openSession();
-		session.beginTransaction();
-		session.save(education);
-		session.getTransaction().commit();
-		session.close();
-	}
-	
-	public void deleteEducation(Education education) {
-		Session session = sessions.openSession();
-		session.beginTransaction();
-		session.delete(education);
-		session.getTransaction().commit();
-		session.close();
-	}
 
-	public void updateEducation(Education education) {
-		Session session = null;
-		
-		try {
-			session = sessions.openSession();
-			session.beginTransaction();
-			session.update(education);
-			session.getTransaction().commit();
-		}
-		finally {
-			if (session != null && session.isOpen()) {
-			session.close();
-			}
-		}
-	}
-	
 	public List<Emails> getAllEmails() {
 		Session session = sessions.openSession();
 		session.beginTransaction();
@@ -717,10 +666,9 @@ public class LawSiteDAO {
 	public List<EmployeeContactsViz> getPersonPrifile(Integer id) {
 		Session session = sessions.openSession();
 		session.beginTransaction();
-		String sql = "select person_name, person_surname, person_patronymic, adress, email, phone " +
-				"from people left join phones on phones.person_id = people.id " +
-				"left join emails on emails.person_id = people.id " +
-				"left join employees on employees.person_id = people.id " +
+		String sql = "select person_name, person_surname, person_patronymic, adress, position_name " +
+				"from people left join employees on employees.person_id = people.id " +
+				"left join positions on positions.id = employees.position_id " +
 				"where people.id = :person_id";
 		Query query = session.createSQLQuery(sql).setParameter("person_id", id)
 					.setResultTransformer(Transformers.aliasToBean(EmployeeContactsViz.class));

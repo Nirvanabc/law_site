@@ -5,8 +5,7 @@ public class EmployeeContactsViz {
 	private String person_surname;
 	private String person_patronymic;
 	private String adress;
-	private String email;
-	private String phone;
+	private String position;
 	
 	public String getAdress() {
 		return adress;
@@ -32,25 +31,18 @@ public class EmployeeContactsViz {
 	public void setPerson_patronymic(String person_patronymic) {
 		this.person_patronymic = person_patronymic;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	
+
 	public void print() {
 		System.out.println(this.person_name);
 		System.out.println(this.person_surname);
 		System.out.println(this.person_patronymic);
 		System.out.println(this.adress);
-		System.out.println(this.email);
-		System.out.println(this.phone);
+		System.out.println(this.position);
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
 	}
 }

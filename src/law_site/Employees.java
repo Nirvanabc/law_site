@@ -5,7 +5,6 @@ import java.util.Set;
 public class Employees {
 	private Integer id;
 	private Integer person_id;
-	private String education;
 	private Integer position_id;
 	private String adress;
 	private Set<EmployeesInService> employees_in_service;
@@ -40,14 +39,6 @@ public class Employees {
 	
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	
-	public String getEducation() {
-		return education;
-	}
-		
-	public void setEducation(String education) {
-		this.education = education;
 	}
 	
 	public String getAdress() {

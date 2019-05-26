@@ -158,61 +158,6 @@ public class TestLawSiteDAO {
 			new Object[] { null, null, true }, 
 		};
 	}
-
-	@Test(dataProvider = "educationTestData")
-	public void EducationTest(String s1, String s2, boolean exc) {
-		LawSiteDAO ls = new LawSiteDAO();
-		
-		Integer rows = null;
-		
-		try {
-			rows = ls.getAllEducation().size();
-		} catch (Exception e) {
-			assert(false);
-		}
-		
-		assert(rows != null);
-	  
-		Education education = new Education();
-		education.setEducation_name(s1);
-		  
-		try {
-			ls.storeEducation(education);
-		} catch (Exception e) {
-			System.out.println("**");
-			assert(exc);
-			return;
-		}
-		
-		Education tmp = ls.loadEducation(education.getId());
-		try {			
-			assert(tmp != null);
-			assert(equals(tmp.getEducation_name(), s1));
-			tmp.setEducation_name(s2);
-			ls.updateEducation(tmp);
-			tmp = ls.loadEducation(education.getId());
-			assert(tmp != null);
-			assert(equals(tmp.getEducation_name(), s2));
-			ls.deleteEducation(tmp);
-		} catch (Exception e) {
-			ls.deleteEducation(tmp);
-			System.out.println("@@");
-			assert(exc);
-		}
-		
-		System.out.println("^^");
-		assert(rows.equals(ls.getAllEducation().size()));
-	}
-
-	@DataProvider
-	public Object[][] educationTestData() {
-		return new Object[][] {
-			new Object[] { "TEST1", "TEST2", false },
-			new Object[] { "TEST1", null, true },
-			new Object[] { null, "TEST2", true },
-			new Object[] { null, null, true },
-		};
-	}
 	
 	@Test(dataProvider = "emailsTestData")
 	public void EmailsTest(String s1, String s2, boolean exc) {

@@ -9,7 +9,6 @@
 			<generator class="increment"/>
 		</id>
 		<property name="person_id" column="person_id"/>
-		<property name="education" column="education"/>
 		<property name="position_id" column="position_id"/>
 		<property name="adress" column="adress"/>
 	</class>
@@ -28,13 +27,6 @@
 		</id>
 		<property name="person_id" column="person_id"/>
 		<property name="phone" column="phone"/>
-	</class>
-
-	<class name="law_site.Education" table="education">
-		<id name="id" column="id">
-			<generator class="increment"/>
-		</id>
-		<property name="education_name" column="education_name"/>
 	</class>
 	
 	<class name="law_site.Emails" table="emails">

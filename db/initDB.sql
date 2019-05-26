@@ -15,7 +15,6 @@ create table client_contacts (
 create table employees (
 	id SMALLINT not null auto_increment primary key,
     person_id SMALLINT not null,
-    education VARCHAR (30) not null,
     position_id SMALLINT not null,
     adress VARCHAR (30)
 );
@@ -65,11 +64,6 @@ create table people (
     person_patronymic VARCHAR (30)
 );
 
-create table education (
-	id SMALLINT not null auto_increment primary key,
-    education_name VARCHAR (30) not null
-);
-
 alter table employees add
 	foreign key (person_id)
     references people (id)
@@ -98,11 +92,6 @@ alter table phones add
 alter table employees add
 	foreign key (position_id)
     references positions (id)
-    on delete cascade;
-    
-alter table employees add
-	foreign key (position_id)
-    references education (id)
     on delete cascade;
 
 alter table service_history add

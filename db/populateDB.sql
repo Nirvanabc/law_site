@@ -39,14 +39,10 @@ insert into client_contacts values(1, 1, 1, 'Первоапрельская 8');
 insert into client_contacts values(2, 2, 2, 'Первоиюньская 8');
 insert into client_contacts values(3, 3, 6, 'Первомайская 8');
 
-insert into education values(1, 'среднее');
-insert into education values(2, 'профессиональное');
-insert into education values(3, 'высшее');
-
-insert into employees values(1, 2, 1, 1, 'Гудкова 5');
-insert into employees values(2, 4, 2, 2, 'Лесная 5');
-insert into employees values(3, 5, 3, 3, 'Кирова 5');
-insert into employees values(4, 7, 3, 3, 'Малая 5');
+insert into employees values(1, 2, 1, 'Гудкова 5');
+insert into employees values(2, 4, 2, 'Лесная 5');
+insert into employees values(3, 5, 3, 'Кирова 5');
+insert into employees values(4, 7, 3, 'Малая 5');
 
 insert into service_types values(1, 'создание документа', 1000);
 insert into service_types values(2, 'восстановление документа', 500);

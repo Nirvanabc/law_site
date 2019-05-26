@@ -14,12 +14,13 @@
     
     <div>
     	<a href = "clients"> Список клиентов</a>
-    	</div>
-    	<div>
+    </div>
+    <div>
     	<a href = "employees"> Список сотрудников</a>
-    	</div>
-    	<div>
+    </div>
+    <div>
     	<a href = "services"> Список услуг</a>
+    </div>	
     
      <form class = "addform" METHOD="post">
    	 		<div>

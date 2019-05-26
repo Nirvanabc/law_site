@@ -37,6 +37,45 @@ public class Controller1 {
 		}
 	}
 	
+	public static class NewEmp{
+		private String name;
+		private String surname;
+		private String patron;
+		private String adress;
+		private int position_id;
+		
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getPatron() {
+			return patron;
+		}
+		public void setPatron(String patron) {
+			this.patron = patron;
+		}
+		public String getSurname() {
+			return surname;
+		}
+		public void setSurname(String surname) {
+			this.surname = surname;
+		}
+		public String getAdress() {
+			return adress;
+		}
+		public void setAdress(String adress) {
+			this.adress = adress;
+		}
+		public int getPosition_id() {
+			return position_id;
+		}
+		public void setPosition_id(int position_id) {
+			this.position_id = position_id;
+		}
+	}
+	
 	public static class NewData{
 		private String name;
 		private String surname;
@@ -103,8 +142,55 @@ public class Controller1 {
 		}
 	}
 	
+	@RequestMapping(value = "/employees", method = RequestMethod.GET)
+	public String getemployees(ModelMap model) {
+		model.addAttribute("newemp", new NewEmp()); 
+		model.addAttribute("idemp", new IdClient());
+		model.addAttribute("changeemp", new NewEmp());
+		try {
+			List<Employees> employees = dao.getAllEmployees();
+			model.addAttribute("employees", employees);
+		} catch (HibernateException e) {
+			return "error";
+		}
+		return "employees";
+	}
+	
+	@RequestMapping(value = "/employees", method = RequestMethod.POST)
+	public String emps_post(@ModelAttribute("newemp") NewEmp nc, @ModelAttribute("idemp") IdClient ic, 
+			ModelMap model) {
+		try {
+			List<Employees> employees = dao.getAllEmployees();
+			if(nc.name != null && nc.name.length() >= 1 && nc.surname != null && 
+					nc.surname.length() >= 1) {
+				People p = new People();
+				p.setPerson_name(nc.name);
+				p.setPerson_surname(nc.surname);
+				p.setPerson_patronymic(nc.patron);
+				dao.storePeople(p);
+				Employees emp = new Employees();
+				emp.setPerson_id(p.getId());
+				emp.setPosition_id(nc.position_id);
+				emp.setAdress(nc.adress);
+				dao.storeEmployee(emp);
+				employees = dao.getAllEmployees();
+			}
+				else if(ic.clientid != 0) {
+					Employees d = dao.loadEmployee(ic.clientid);
+					dao.deleteEmployee(d);
+					employees = dao.getAllEmployees();
+				}
+				
+			model.addAttribute("employees", employees);
+		}	catch(HibernateException e) {
+			return "error";
+		}
+		return "employees";
+	}
+	
+	
 	@RequestMapping(value = "/clients", method = RequestMethod.GET)
-	public String getLessons(ModelMap model) {
+	public String getClients(ModelMap model) {
 		model.addAttribute("newclient", new ClientName()); 
 		model.addAttribute("idclient", new IdClient());
 		model.addAttribute("clientname", new ClientName());
@@ -118,7 +204,7 @@ public class Controller1 {
 	}
 	
 	@RequestMapping(value = "/clients", method = RequestMethod.POST)
-	public String lessons_post(@ModelAttribute("newclient") ClientName nc, @ModelAttribute("idclient") IdClient ic, 
+	public String clients_post(@ModelAttribute("newclient") ClientName nc, @ModelAttribute("idclient") IdClient ic, 
 			@ModelAttribute("clientname") ClientName cn,  ModelMap model) {
 		try {
 			List<Clients> clients = dao.getAllClients();
@@ -139,7 +225,6 @@ public class Controller1 {
 			return "error";
 		}
 		return "clients";
- 
 	}
 	
 	@RequestMapping(value = "/person", method = RequestMethod.GET)
@@ -245,12 +330,13 @@ public class Controller1 {
 				ncc.setClient_id(client_id);
 				ncc.setPerson_id(person.getId());
 				dao.storeClientContact(ncc);
+				cc = dao.getClientContacts(client.getClient_name());
 			} else if(nn.name != null && nn.name.length() >= 1) {
 				client.setClient_name(nn.name);
 				dao.updateClient(client);
 				client = dao.loadClient(client_id);
+				cc = dao.getClientContacts(client.getClient_name());
 			}
-			cc = dao.getClientContacts(client.getClient_name());
 			model.addAttribute("сс", cc);
 		}	catch(HibernateException e) {
 			return "error";
