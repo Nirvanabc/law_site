@@ -1,6 +1,5 @@
 package law_site;
 
-import java.text.ParseException;
 import java.util.List;
 
 import org.hibernate.HibernateException;
@@ -16,6 +15,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class Controller1 {
 	
 	private static LawSiteDAO dao = new LawSiteDAO();
+	
+	public static class Pos{
+		private String name;
+		private int salary;
+		public String getname() {
+			return name;
+		}
+		public void setname(String s) {
+			this.name = s;
+		}
+		public int getSalary() {
+			return salary;
+		}
+		public void setSalary(int salary) {
+			this.salary = salary;
+		}
+	}
+	
 	
 	public static class ClientName{
 		private String name;
@@ -148,7 +165,7 @@ public class Controller1 {
 		model.addAttribute("idemp", new IdClient());
 		model.addAttribute("changeemp", new NewEmp());
 		try {
-			List<Employees> employees = dao.getAllEmployees();
+			List<EmployeesViz> employees = dao.getAllEmployeesViz();
 			model.addAttribute("employees", employees);
 		} catch (HibernateException e) {
 			return "error";
@@ -160,7 +177,7 @@ public class Controller1 {
 	public String emps_post(@ModelAttribute("newemp") NewEmp nc, @ModelAttribute("idemp") IdClient ic, 
 			ModelMap model) {
 		try {
-			List<Employees> employees = dao.getAllEmployees();
+			List<EmployeesViz> employees = dao.getAllEmployeesViz();
 			if(nc.name != null && nc.name.length() >= 1 && nc.surname != null && 
 					nc.surname.length() >= 1) {
 				People p = new People();
@@ -173,12 +190,11 @@ public class Controller1 {
 				emp.setPosition_id(nc.position_id);
 				emp.setAdress(nc.adress);
 				dao.storeEmployee(emp);
-				employees = dao.getAllEmployees();
-			}
-				else if(ic.clientid != 0) {
+				employees = dao.getAllEmployeesViz();
+			} else if(ic.clientid != 0) {
 					Employees d = dao.loadEmployee(ic.clientid);
 					dao.deleteEmployee(d);
-					employees = dao.getAllEmployees();
+					employees = dao.getAllEmployeesViz();
 				}
 				
 			model.addAttribute("employees", employees);
@@ -188,7 +204,93 @@ public class Controller1 {
 		return "employees";
 	}
 	
+	@RequestMapping(value = "/error", method = RequestMethod.GET)
+	public String getError(ModelMap model) {
+		return "error";
+	}
 	
+	@RequestMapping(value = "/error", method = RequestMethod.POST)
+	public String postError(ModelMap model) {
+		return "error";
+	}
+	
+	@RequestMapping(value = "/services", method = RequestMethod.GET)
+	public String getServices(ModelMap model) {
+		model.addAttribute("newpos", new Pos()); 
+		model.addAttribute("idpos", new IdClient());
+		
+		try {
+			List<ServiceTypes> pos = dao.getAllServiceTypes();
+			model.addAttribute("services", pos);
+		} catch (HibernateException e) {
+			return "error";
+		}
+		return "services";
+	}
+	
+	@RequestMapping(value = "/services", method = RequestMethod.POST)
+	public String services_post(@ModelAttribute("newpos") Pos nc, @ModelAttribute("idpos") IdClient ic, 
+			ModelMap model) {
+		try {
+			List<ServiceTypes> services = dao.getAllServiceTypes();
+			if(nc.name != null && nc.name.length() >= 1) {
+				ServiceTypes position = new ServiceTypes();
+				position.setService_name(nc.name);
+				position.setCost(nc.salary);
+				dao.storeServiceType(position);
+				services = dao.getAllServiceTypes();
+			} else if(ic.clientid != 0) {
+					ServiceTypes deleted = dao.loadServiceType(ic.clientid);
+					dao.deleteServiceType(deleted);
+					services = dao.getAllServiceTypes();
+				}
+				
+			model.addAttribute("services", services);
+		}	catch(HibernateException e) {
+			return "error";
+		}
+		return "services";
+	}
+	
+	@RequestMapping(value = "/positions", method = RequestMethod.GET)
+	public String getPositions(ModelMap model) {
+		model.addAttribute("newpos", new Pos()); 
+		model.addAttribute("idpos", new IdClient());
+		
+		try {
+			List<Positions> pos = dao.getAllPositions();
+			model.addAttribute("positions", pos);
+		} catch (HibernateException e) {
+			return "error";
+		}
+		return "positions";
+	}
+	
+	@RequestMapping(value = "/positions", method = RequestMethod.POST)
+	public String positions_post(@ModelAttribute("newpos") Pos nc, @ModelAttribute("idpos") IdClient ic, 
+			ModelMap model) {
+		try {
+			List<Positions> positions = dao.getAllPositions();
+			if(nc.name != null && nc.name.length() >= 1 && nc.salary > 0) {
+				System.out.println(nc.salary);
+				Positions position = new Positions();
+				position.setPosition_name(nc.name);
+				position.setSalary(nc.salary);
+				dao.storePosition(position);
+				positions = dao.getAllPositions();
+			} else if(ic.clientid != 0) {
+					Positions deleted = dao.loadPosition(ic.clientid);
+					dao.deletePosition(deleted);
+					positions = dao.getAllPositions();
+				}
+				
+			model.addAttribute("positions", positions);
+		}	catch(HibernateException e) {
+			return "error";
+		}
+		return "positions";
+	}
+
 	@RequestMapping(value = "/clients", method = RequestMethod.GET)
 	public String getClients(ModelMap model) {
 		model.addAttribute("newclient", new ClientName()); 

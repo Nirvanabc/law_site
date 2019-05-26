@@ -18,6 +18,7 @@ public class TestLawSiteDAO {
 		return a.equals(b);
 	}
 	
+	/*
 	@Test(dataProvider = "peopleTestData")
 	public void PeopleTest(String s1, String s2, String s3, boolean exc) {
 		LawSiteDAO ls = new LawSiteDAO();
@@ -511,6 +512,33 @@ public class TestLawSiteDAO {
 			new Object[] { 10 },
 		};
 	}
+	*/
+	
+	@Test(dataProvider = "emp")
+	public void Employees(String s1) {
+		LawSiteDAO ls = new LawSiteDAO();
+		List<EmployeesViz> employees = null;
+		
+		try {
+			employees = ls.getAllEmployeesViz();
+			System.out.println(s1);
+			for(EmployeesViz e : employees) {
+	            System.out.println(e.getPerson_name());
+	        }
+		} catch (Exception e) {
+			System.out.println("^^");
+			e.printStackTrace();
+			assert(false);
+		}
+	}
+	
+	@DataProvider
+	public Object[][] emp() {
+		return new Object[][] {
+			new Object[] { "Илюшин" }
+		};
+	}
+	
 	
 }
 

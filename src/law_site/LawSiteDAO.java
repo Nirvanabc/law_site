@@ -491,6 +491,20 @@ public class LawSiteDAO {
 		return list;
 	}
 
+	public List<EmployeesViz> getAllEmployeesViz() {
+		Session session = sessions.openSession();
+		session.beginTransaction();
+		String sql = "select employees.id, people.id as person_id, position_id, adress, person_name, person_surname, person_patronymic " +
+				"from employees inner join people on employees.person_id = people.id ";
+		Query query = session.createSQLQuery(sql).
+				setResultTransformer(Transformers.aliasToBean(EmployeesViz.class));
+		session.getTransaction().commit();
+		@SuppressWarnings("unchecked")
+		List<EmployeesViz> list = query.list();
+		session.close();
+		return list;
+	}
+	
 	public List<String> getPersonEmails(int person_id) {
 		Session session = sessions.openSession();
 		session.beginTransaction();

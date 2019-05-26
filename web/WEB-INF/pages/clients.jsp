@@ -21,6 +21,9 @@
     <div>
     	<a href = "services"> Список услуг</a>
     </div>	
+     <div>
+    	<a href = "positions"> Список вакансий</a>
+    </div>
     
      <form class = "addform" METHOD="post">
    	 		<div>

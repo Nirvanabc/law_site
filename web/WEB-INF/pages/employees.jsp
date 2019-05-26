@@ -19,7 +19,10 @@
     </div>
     <div>
     	<a href = "services"> Список услуг</a>
-    </div>	
+    </div>
+     <div>
+    	<a href = "positions"> Список вакансий</a>
+    </div>
     	
     <form class = "addform" METHOD="post">
    	 		<div>
@@ -60,7 +63,7 @@
    	 	</form>
     	
     	<div>Сотрудники: <div>
-    	<div> Id сотрудника, Id человека, адрес,  ФИО</div>
+    	<div> Id сотрудника, Id человека, ФИО, адрес,  ФИО</div>
     	
          <table class = "main_data">
 			<c:forEach items="${employees}" var="contact">
@@ -71,10 +74,16 @@
 			   ${contact.person_id}
 				</a>
 				</td>
+				<td class = "name">
+				${contact.person_name}
+				<td class = "surname">
+				${contact.person_surname}
+				<td class = "pat">
+				${contact.person_patronymic}
 				<td class = "adress">
 				${contact.adress}
 				,
-				<td class = "position_id"><a href="position?id=${contact.position_id}">
+				<td class = "position_id"><a href="positions">
 				${contact.position_id}
 				</td>
 			</tr>

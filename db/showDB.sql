@@ -10,4 +10,3 @@ SELECT * FROM service_types;
 SELECT * FROM phones;
 SELECT * FROM emails;
 SELECT * FROM people;
-SELECT * FROM education;
